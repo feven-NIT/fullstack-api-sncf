@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sncf
+  namespace: openshift-gitops
+spec:
+  project: sncf
+  source:
+    repoURL: https://github.com/feven-redhat/fullstack-app-sncf.git
+    targetRevision: main
+    path: headquarter/base
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: headquarter
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    automated:
+      selfHeal: true
+      prune: true
+    managedNamespaceMetadata:
+      labels:
+        argocd.argoproj.io/managed-by: openshift-gitops
